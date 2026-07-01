@@ -31,6 +31,8 @@
   "bundle": {
     "active": true,
     "publisher": "Aanish Farrukh",
+    "license": "MIT",
+    "licenseFile": "../LICENSE",
     "targets": "all",
     "externalBin": [
       "rclone"
@@ -44,7 +46,6 @@
     ],
     "windows": {
       "nsis": {
-        "license": "../LICENSE",
         "installerIcon": "icons/icon.ico",
         "uninstallerIcon": "icons/icon.ico",
         "displayLanguageSelector": false
