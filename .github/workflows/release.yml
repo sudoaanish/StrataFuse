@@ -50,22 +50,22 @@ jobs:
 
       - name: Download Windows Sidecar
         if: matrix.platform == 'windows-latest'
-        shell: bash
+        shell: powershell
         run: |
           curl -L https://downloads.rclone.org/v1.68.1/rclone-v1.68.1-windows-amd64.zip -o rclone-windows.zip
-          tar -xf rclone-windows.zip
-          mv rclone-v1.68.1-windows-amd64/rclone.exe src-tauri/binaries/rclone-x86_64-pc-windows-msvc.exe
+          Expand-Archive -Path rclone-windows.zip -DestinationPath tmp-win -Force
+          Move-Item -Path tmp-win/*/rclone.exe -Destination src-tauri/binaries/rclone-x86_64-pc-windows-msvc.exe -Force
 
       - name: Download macOS Sidecars
         if: matrix.platform == 'macos-latest'
         shell: bash
         run: |
           curl -L https://downloads.rclone.org/v1.68.1/rclone-v1.68.1-osx-amd64.zip -o rclone-osx-amd64.zip
-          tar -xf rclone-osx-amd64.zip
+          unzip -o rclone-osx-amd64.zip
           mv rclone-v1.68.1-osx-amd64/rclone src-tauri/binaries/rclone-x86_64-apple-darwin
 
           curl -L https://downloads.rclone.org/v1.68.1/rclone-v1.68.1-osx-arm64.zip -o rclone-osx-arm64.zip
-          tar -xf rclone-osx-arm64.zip
+          unzip -o rclone-osx-arm64.zip
           mv rclone-v1.68.1-osx-arm64/rclone src-tauri/binaries/rclone-aarch64-apple-darwin
 
           chmod +x src-tauri/binaries/rclone-x86_64-apple-darwin src-tauri/binaries/rclone-aarch64-apple-darwin
@@ -75,7 +75,7 @@ jobs:
         shell: bash
         run: |
           curl -L https://downloads.rclone.org/v1.68.1/rclone-v1.68.1-linux-amd64.zip -o rclone-linux-amd64.zip
-          tar -xf rclone-linux-amd64.zip
+          unzip -o rclone-linux-amd64.zip
           mv rclone-v1.68.1-linux-amd64/rclone src-tauri/binaries/rclone-x86_64-unknown-linux-gnu
           chmod +x src-tauri/binaries/rclone-x86_64-unknown-linux-gnu
 
