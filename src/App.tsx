@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { invoke } from '@tauri-apps/api/core';
 import { openUrl } from '@tauri-apps/plugin-opener';
+import { check } from '@tauri-apps/plugin-updater';
+import { relaunch } from '@tauri-apps/plugin-process';
 import type { MountProfile } from './lib/types';
 import { SetupWizard } from './components/wizard/SetupWizard';
 import { ProfileSelector } from './components/ProfileSelector';
@@ -18,6 +20,12 @@ function AppContent() {
   const [editingProfile, setEditingProfile] = useState<MountProfile | null>(null);
   const { addToast } = useToast();
 
+  // Updater States
+  const [updateInfo, setUpdateInfo] = useState<any>(null);
+  const [updateStatus, setUpdateStatus] = useState<'idle' | 'checking' | 'ready' | 'downloading' | 'installing'>('idle');
+  const [downloadProgress, setDownloadProgress] = useState<number>(0);
+  const [contentLength, setContentLength] = useState<number>(0);
+
   const loadProfiles = useCallback(async () => {
     try {
       const result = await invoke<MountProfile[]>('list_profiles');
@@ -31,13 +39,84 @@ function AppContent() {
     }
   }, [addToast]);
 
-  // Initial load
+  // Initial load & Boot Update check
   useEffect(() => {
     (async () => {
       const result = await loadProfiles();
       setView(result.length > 0 ? 'profiles' : 'wizard');
+
+      try {
+        const update = await check();
+        if (update) {
+          setUpdateInfo(update);
+          setUpdateStatus('ready');
+          addToast('info', `StrataFuse v${update.version} is available! Click the update badge below to install.`);
+        }
+      } catch (err) {
+        console.error('Failed to run boot update check:', err);
+      }
     })();
-  }, [loadProfiles]);
+  }, [loadProfiles, addToast]);
+
+  const handleManualUpdateCheck = async () => {
+    if (updateStatus === 'checking' || updateStatus === 'downloading' || updateStatus === 'installing') return;
+    
+    try {
+      setUpdateStatus('checking');
+      addToast('info', 'Checking for updates...');
+      const update = await check();
+      if (update) {
+        setUpdateInfo(update);
+        setUpdateStatus('ready');
+        addToast('info', `StrataFuse v${update.version} is available!`);
+      } else {
+        setUpdateStatus('idle');
+        addToast('success', 'StrataFuse is up to date!');
+      }
+    } catch (err) {
+      console.error('Failed to check for updates:', err);
+      setUpdateStatus('idle');
+      addToast('error', 'Failed to check for updates. Please try again later.');
+    }
+  };
+
+  const handleInstallUpdate = async () => {
+    if (!updateInfo) return;
+    
+    try {
+      setUpdateStatus('downloading');
+      setDownloadProgress(0);
+      setContentLength(0);
+      
+      let downloaded = 0;
+      await updateInfo.download((event: any) => {
+        switch (event.event) {
+          case 'Started':
+            if (event.data && event.data.contentLength) {
+              setContentLength(event.data.contentLength);
+            }
+            break;
+          case 'Progress':
+            if (event.data && event.data.chunkLength) {
+              downloaded += event.data.chunkLength;
+              setDownloadProgress(downloaded);
+            }
+            break;
+          case 'Finished':
+            break;
+        }
+      });
+      
+      setUpdateStatus('installing');
+      addToast('info', 'Installing update and restarting...');
+      await updateInfo.install();
+      await relaunch();
+    } catch (err) {
+      console.error('Failed to download and install update:', err);
+      setUpdateStatus('ready');
+      addToast('error', 'Update installation failed. Please check your network connection.');
+    }
+  };
 
   const handleWizardComplete = async () => {
     setEditingProfile(null);
@@ -124,8 +203,40 @@ function AppContent() {
       {/* Footer Credits */}
       {view !== 'dashboard' && view !== 'loading' && (
         <div className="absolute bottom-4 left-6 right-6 flex items-center justify-between text-[10px] text-white/20 select-none z-30 font-mono">
-          <div>
-            StrataFuse v0.1.0
+          <div className="flex items-center gap-3 animate-fade-in">
+            <span>StrataFuse v0.1.1</span>
+            {updateStatus === 'checking' && (
+              <span className="flex items-center gap-1 text-violet-400">
+                <Loader2 className="h-2.5 w-2.5 animate-spin" /> Checking...
+              </span>
+            )}
+            {updateStatus === 'ready' && updateInfo && (
+              <button
+                onClick={handleInstallUpdate}
+                className="bg-violet-600/45 hover:bg-violet-600/65 text-violet-200 border border-violet-500/25 px-2 py-0.5 rounded transition-all cursor-pointer font-semibold shadow-[0_0_10px_rgba(124,58,237,0.15)] animate-pulse"
+              >
+                ✨ Install v{updateInfo.version}
+              </button>
+            )}
+            {updateStatus === 'downloading' && (
+              <span className="text-cyan-400 font-semibold animate-pulse">
+                📥 Downloading... {contentLength > 0 ? `${Math.round((downloadProgress / contentLength) * 100)}%` : `${(downloadProgress / 1024 / 1024).toFixed(1)}MB`}
+              </span>
+            )}
+            {updateStatus === 'installing' && (
+              <span className="text-emerald-400 font-semibold animate-pulse">
+                ⚙️ Installing...
+              </span>
+            )}
+            {updateStatus === 'idle' && (
+              <button
+                onClick={handleManualUpdateCheck}
+                className="hover:text-white/40 cursor-pointer transition-colors"
+                title="Click to check for updates"
+              >
+                (Check for Updates)
+              </button>
+            )}
           </div>
           <div>
             Developed by Aanish Farrukh (
