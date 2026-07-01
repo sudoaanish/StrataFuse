@@ -1,0 +1,137 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+/* ─── Tailwind v4 Theme ─────────────────────────────────────────────── */
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  --color-surface-0: #0a0a0f;
+  --color-surface-1: #12121a;
+  --color-surface-2: #1a1a2e;
+  --color-surface-3: #242438;
+
+  --color-accent-violet: #7c3aed;
+  --color-accent-purple: #a855f7;
+  --color-accent-cyan: #06b6d4;
+  --color-accent-emerald: #10b981;
+
+  --color-border-subtle: rgba(255, 255, 255, 0.06);
+  --color-border-medium: rgba(255, 255, 255, 0.10);
+  --color-border-active: rgba(124, 58, 237, 0.5);
+}
+
+/* ─── Base ───────────────────────────────────────────────────────────── */
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: var(--color-surface-0);
+  color: white;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ─── Glass Card ─────────────────────────────────────────────────────── */
+.glass-card {
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 1rem;
+}
+
+.glass-card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.glass-card-hover:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* ─── Animations ─────────────────────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
+.animate-slide-in { animation: slideInRight 0.3s ease-out forwards; }
+.animate-slide-up { animation: slideInUp 0.25s ease-out forwards; }
+.animate-pulse-glow { animation: pulseGlow 2.5s ease-in-out infinite; }
+.animate-spin-slow { animation: spin 2s linear infinite; }
+
+/* ─── Gradient Orbs ──────────────────────────────────────────────────── */
+.gradient-orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.15;
+  pointer-events: none;
+  z-index: 0;
+}
+.gradient-orb-1 {
+  top: -10%; left: -5%; width: 500px; height: 500px;
+  background: radial-gradient(circle, #7c3aed 0%, transparent 70%);
+}
+.gradient-orb-2 {
+  bottom: -10%; right: -5%; width: 600px; height: 600px;
+  background: radial-gradient(circle, #06b6d4 0%, transparent 70%);
+}
+.gradient-orb-3 {
+  top: 40%; right: 20%; width: 400px; height: 400px;
+  background: radial-gradient(circle, #a855f7 0%, transparent 70%);
+  opacity: 0.08;
+}
+
+.progress-bar-fill {
+  transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  background: linear-gradient(90deg, #7c3aed, #06b6d4);
+}
+
+.toggle-track { transition: background-color 0.2s ease; }
+.toggle-knob { transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+
+::selection {
+  background: rgba(136, 192, 208, 0.25);
+  color: white;
+}
