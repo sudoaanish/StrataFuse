@@ -17,7 +17,7 @@ use commands::logs::{
 };
 use commands::profiles::{
     create_profile, delete_profile, get_profile, list_profiles, update_profile,
-    obscure_password, authorize_provider,
+    obscure_password, authorize_provider, purge_profile_cache,
 };
 use commands::stats::{
     get_aggregated_stats, get_core_stats, get_mount_status, get_recent_transfers, get_vfs_stats,
@@ -247,6 +247,7 @@ pub fn run() {
             update_profile,
             obscure_password,
             authorize_provider,
+            purge_profile_cache,
         ])
         // ─── Hide on Close (minimize to tray) ───────────────────────────
         .on_window_event(|window, event| {

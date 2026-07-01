@@ -95,6 +95,10 @@ pub struct MountProfile {
     /// Whether this profile should mount automatically on app startup.
     #[serde(default)]
     pub auto_mount: bool,
+
+    /// Custom bandwidth limit, e.g. "10M" or "5M".
+    #[serde(default)]
+    pub bwlimit: Option<String>,
 }
 
 impl MountProfile {
@@ -116,6 +120,7 @@ impl MountProfile {
             config_path: None,
             volume_name: self.name.clone(),
             log_file: None,
+            bwlimit: self.bwlimit.clone(),
         }
     }
 }
@@ -266,5 +271,58 @@ impl ProfileManager {
 
         info!(id = %id, "Profile updated");
         self.save_to_disk()
+    }
+
+    /// Purge the local VFS file cache for a profile.
+    pub fn purge_vfs_cache(&self, id: &str) -> Result<(), std::io::Error> {
+        let profile = self.get(id).ok_or_else(|| {
+            std::io::Error::new(
+                std::io::ErrorKind::NotFound,
+                format!("Profile not found: {}", id),
+            )
+        })?;
+
+        let clean_remote = profile.remote.trim_end_matches(':');
+        
+        let get_home_dir = || {
+            std::env::var("USERPROFILE")
+                .ok()
+                .or_else(|| std::env::var("HOME").ok())
+                .map(PathBuf::from)
+        };
+
+        let mut path = if cfg!(target_os = "windows") {
+            if let Ok(local_appdata) = std::env::var("LOCALAPPDATA") {
+                PathBuf::from(local_appdata)
+            } else {
+                get_home_dir()
+                    .ok_or_else(|| std::io::Error::new(std::io::ErrorKind::NotFound, "Could not resolve local AppData directory"))?
+                    .join("AppData")
+                    .join("Local")
+            }
+        } else if cfg!(target_os = "macos") {
+            get_home_dir()
+                .ok_or_else(|| std::io::Error::new(std::io::ErrorKind::NotFound, "Could not resolve macOS home directory"))?
+                .join("Library")
+                .join("Caches")
+        } else {
+            get_home_dir()
+                .ok_or_else(|| std::io::Error::new(std::io::ErrorKind::NotFound, "Could not resolve Linux home directory"))?
+                .join(".cache")
+        };
+
+        path.push("rclone");
+        path.push("vfs");
+        path.push(clean_remote);
+
+        info!(path = %path.display(), "Purging VFS cache directory");
+
+        if path.exists() {
+            std::fs::remove_dir_all(&path)?;
+            // Re-create the folder so it exists cleanly for the mount next time
+            std::fs::create_dir_all(&path)?;
+        }
+
+        Ok(())
     }
 }

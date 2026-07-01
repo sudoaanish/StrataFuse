@@ -1,0 +1,94 @@
+name: Release CI/CD
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: 'macos-latest'
+            args: '--target universal-apple-darwin'
+          - platform: 'ubuntu-22.04'
+            args: ''
+          - platform: 'windows-latest'
+            args: ''
+
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+
+      - name: Install system dependencies (Linux only)
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev build-essential curl wget file libxdo-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Create binaries directory
+        run: mkdir -p src-tauri/binaries
+
+      - name: Download Windows Sidecar
+        if: matrix.platform == 'windows-latest'
+        shell: bash
+        run: |
+          curl -L https://downloads.rclone.org/v1.68.1/rclone-v1.68.1-windows-amd64.zip -o rclone-windows.zip
+          tar -xf rclone-windows.zip
+          mv rclone-v1.68.1-windows-amd64/rclone.exe src-tauri/binaries/rclone-x86_64-pc-windows-msvc.exe
+
+      - name: Download macOS Sidecars
+        if: matrix.platform == 'macos-latest'
+        shell: bash
+        run: |
+          curl -L https://downloads.rclone.org/v1.68.1/rclone-v1.68.1-osx-amd64.zip -o rclone-osx-amd64.zip
+          tar -xf rclone-osx-amd64.zip
+          mv rclone-v1.68.1-osx-amd64/rclone src-tauri/binaries/rclone-x86_64-apple-darwin
+
+          curl -L https://downloads.rclone.org/v1.68.1/rclone-v1.68.1-osx-arm64.zip -o rclone-osx-arm64.zip
+          tar -xf rclone-osx-arm64.zip
+          mv rclone-v1.68.1-osx-arm64/rclone src-tauri/binaries/rclone-aarch64-apple-darwin
+
+          chmod +x src-tauri/binaries/rclone-x86_64-apple-darwin src-tauri/binaries/rclone-aarch64-apple-darwin
+
+      - name: Download Linux Sidecar
+        if: matrix.platform == 'ubuntu-22.04'
+        shell: bash
+        run: |
+          curl -L https://downloads.rclone.org/v1.68.1/rclone-v1.68.1-linux-amd64.zip -o rclone-linux-amd64.zip
+          tar -xf rclone-linux-amd64.zip
+          mv rclone-v1.68.1-linux-amd64/rclone src-tauri/binaries/rclone-x86_64-unknown-linux-gnu
+          chmod +x src-tauri/binaries/rclone-x86_64-unknown-linux-gnu
+
+      - name: Build and Publish Release
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: 'StrataFuse ${{ github.ref_name }}'
+          releaseBody: 'Release ${{ github.ref_name }}'
+          releaseDraft: true
+          prerelease: false
+          args: ${{ matrix.args }}

@@ -52,6 +52,9 @@ pub struct RcloneConfig {
 
     /// Path to the log file on disk.
     pub log_file: Option<String>,
+
+    /// Custom bandwidth limit, e.g. "10M" or "5M".
+    pub bwlimit: Option<String>,
 }
 
 impl Default for RcloneConfig {
@@ -74,6 +77,7 @@ impl Default for RcloneConfig {
             config_path: None,
             volume_name: "StrataFuse Mount".into(),
             log_file: None,
+            bwlimit: None,
         }
     }
 }
@@ -136,6 +140,13 @@ impl RcloneConfig {
         if let Some(ref path) = self.log_file {
             args.push("--log-file".into());
             args.push(path.clone());
+        }
+
+        if let Some(ref limit) = self.bwlimit {
+            if !limit.is_empty() {
+                args.push("--bwlimit".into());
+                args.push(limit.clone());
+            }
         }
 
         args

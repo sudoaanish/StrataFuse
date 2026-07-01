@@ -8,7 +8,7 @@ import { TransferTable } from './TransferTable';
 import { CachePanel } from './CachePanel';
 import { LogViewer } from './LogViewer';
 import { formatBytes, formatSpeed, formatDuration } from '../../lib/format';
-import { Square, RefreshCw, Download, Upload, Activity, AlertTriangle, ArrowLeft, Folder } from 'lucide-react';
+import { Square, RefreshCw, Download, Activity, AlertTriangle, ArrowLeft, Folder, Cloud } from 'lucide-react';
 
 interface Props {
   profileName: string;
@@ -19,7 +19,7 @@ interface Props {
 }
 
 export function Dashboard({ profileName, profileId, mountPoint, onDisconnect, onBackToList }: Props) {
-  const { coreStats, vfsStats, daemonStatus, recentTransfers } = useStats({ enabled: true, interval: 2000, profileId });
+  const { coreStats, vfsStats, daemonStatus, recentTransfers, storageInfo } = useStats({ enabled: true, interval: 2000, profileId });
   const { entries, totalLines } = useLogs({ enabled: true, interval: 3000, count: 200, profileId });
   const { addToast } = useToast();
   const [uptime, setUptime] = useState(0);
@@ -110,14 +110,15 @@ export function Dashboard({ profileName, profileId, mountPoint, onDisconnect, on
       <div className="grid grid-cols-4 gap-4 mb-6">
         <StatCard
           icon={Download}
-          label="Download"
+          label="Download Speed"
           value={formatSpeed(cs?.speed ?? 0)}
           accentColor="text-cyan-400"
         />
         <StatCard
-          icon={Upload}
-          label="Upload"
-          value={cs ? 'N/A' : '—'}
+          icon={Cloud}
+          label="Cloud Storage"
+          value={storageInfo && storageInfo.total > 0 ? `${formatBytes(storageInfo.used)} / ${formatBytes(storageInfo.total)}` : storageInfo ? 'No limit' : 'Loading...'}
+          subValue={storageInfo && storageInfo.total > 0 ? `${Math.round((storageInfo.used / storageInfo.total) * 100)}% Used` : storageInfo ? 'Unlimited Space' : ''}
           accentColor="text-violet-400"
         />
         <StatCard
@@ -144,7 +145,7 @@ export function Dashboard({ profileName, profileId, mountPoint, onDisconnect, on
 
         {/* Right: Cache + Logs */}
         <div className="col-span-2 flex flex-col gap-4 overflow-hidden min-h-0 h-full">
-          <CachePanel vfsStats={vfsStats ?? null} />
+          <CachePanel vfsStats={vfsStats ?? null} profileId={profileId} />
           <LogViewer logs={logData} />
         </div>
       </div>

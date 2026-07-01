@@ -34,6 +34,7 @@ export interface MountProfile {
   lastUsed: string | null;
   credentials?: Record<string, string>;
   autoMount: boolean;
+  bwlimit?: string;
 }
 
 /* ── Stats ────────────────────────────────────────────────────────────────── */
@@ -96,11 +97,20 @@ export interface CompletedTransferItem {
   checked?: boolean;
 }
 
+export interface StorageInfo {
+  total: number;
+  used: number;
+  free: number;
+  trashed?: number;
+  other?: number;
+}
+
 export interface AggregatedStats {
   mountStatus: string;
   coreStats: CoreStats | null;
   vfsStats: VfsStats | null;
   recentTransfers?: { transferred?: CompletedTransferItem[] } | null;
+  storageInfo?: StorageInfo | null;
 }
 
 /* ── Logs ─────────────────────────────────────────────────────────────────── */
@@ -131,4 +141,5 @@ export interface WizardData {
   tuningProfile: 'media' | 'general' | 'backup';
   profileName: string;
   autoMount: boolean;
+  bwlimit?: string;
 }

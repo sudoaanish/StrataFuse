@@ -249,3 +249,16 @@ pub async fn authorize_provider(
     }
 }
 
+/// Purge the VFS cache for a profile.
+///
+/// Frontend: `await invoke("purge_profile_cache", { profileId: "uuid" })`
+#[tauri::command]
+pub async fn purge_profile_cache(
+    profile_manager: State<'_, Arc<ProfileManager>>,
+    profile_id: String,
+) -> Result<(), AppError> {
+    profile_manager
+        .purge_vfs_cache(&profile_id)
+        .map_err(|e| AppError::Io(e.to_string()))
+}
+

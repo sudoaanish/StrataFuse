@@ -204,7 +204,7 @@ function AppContent() {
       {view !== 'dashboard' && view !== 'loading' && (
         <div className="absolute bottom-4 left-6 right-6 flex items-center justify-between text-[10px] text-white/20 select-none z-30 font-mono">
           <div className="flex items-center gap-3 animate-fade-in">
-            <span>StrataFuse v0.1.1</span>
+            <span>StrataFuse v0.2.0</span>
             {updateStatus === 'checking' && (
               <span className="flex items-center gap-1 text-violet-400">
                 <Loader2 className="h-2.5 w-2.5 animate-spin" /> Checking...

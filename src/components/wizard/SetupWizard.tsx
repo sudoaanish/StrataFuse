@@ -22,6 +22,7 @@ const initialData: WizardData = {
   tuningProfile: 'general',
   profileName: '',
   autoMount: false,
+  bwlimit: '',
 };
 
 type Action =
@@ -81,6 +82,7 @@ export function SetupWizard({ onComplete, onCancel, editingProfile = null }: Pro
         tuningProfile: tuningMap[editingProfile.tuningProfile] || 'media',
         profileName: editingProfile.name,
         autoMount: editingProfile.autoMount || false,
+        bwlimit: editingProfile.bwlimit || '',
       };
     }
     return initialData;
@@ -217,6 +219,7 @@ export function SetupWizard({ onComplete, onCancel, editingProfile = null }: Pro
         lastUsed: editingProfile ? editingProfile.lastUsed : null,
         credentials,
         autoMount: data.autoMount,
+        bwlimit: data.bwlimit || null,
       };
 
       if (editingProfile) {
@@ -283,7 +286,13 @@ export function SetupWizard({ onComplete, onCancel, editingProfile = null }: Pro
               cryptPassword={data.cryptPassword}
               cryptPassword2={data.cryptPassword2}
               mountPoint={data.mountPoint}
-              onUpdate={(field, val) => update({ [field]: val })}
+              onUpdate={(field, val) => {
+                if (field === 'mountEntireDrive' && !val && !data.subDirectory) {
+                  update({ mountEntireDrive: false, subDirectory: 'StrataFuse' });
+                } else {
+                  update({ [field]: val });
+                }
+              }}
               errors={getScopeErrors()}
             />
           )}
@@ -292,9 +301,11 @@ export function SetupWizard({ onComplete, onCancel, editingProfile = null }: Pro
               tuningProfile={data.tuningProfile}
               profileName={data.profileName}
               autoMount={data.autoMount}
+              bwlimit={data.bwlimit || ''}
               onSelectTuning={(val) => update({ tuningProfile: val })}
               onProfileNameChange={(val) => update({ profileName: val })}
               onChangeAutoMount={(val) => update({ autoMount: val })}
+              onBwlimitChange={(val) => update({ bwlimit: val })}
               onCreateProfile={handleCreate}
               isCreating={isSubmitting}
               canCreate={canProceed()}

@@ -16,6 +16,7 @@ pub struct AggregatedStats {
     pub core_stats: Option<Value>,
     pub vfs_stats: Option<Value>,
     pub recent_transfers: Option<Value>,
+    pub storage_info: Option<Value>,
 }
 
 // ─── Commands ───────────────────────────────────────────────────────────────
@@ -115,6 +116,7 @@ pub async fn get_aggregated_stats(
                 core_stats: None,
                 vfs_stats: None,
                 recent_transfers: None,
+                storage_info: None,
             });
         }
     };
@@ -156,11 +158,15 @@ pub async fn get_aggregated_stats(
     // Fetch recent transfers (non-fatal if unavailable)
     let recent_transfers = rc.core_transferred().await.ok();
 
+    // Fetch storage space (non-fatal if unavailable)
+    let storage_info = rc.operations_about(&config.remote).await.ok();
+
     Ok(AggregatedStats {
         mount_status,
         core_stats,
         vfs_stats,
         recent_transfers,
+        storage_info,
     })
 }
 

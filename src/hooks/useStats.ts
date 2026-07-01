@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { invoke } from '@tauri-apps/api/core';
-import type { AggregatedStats, CoreStats, VfsStats, DaemonState, CompletedTransferItem } from '../lib/types';
+import type { AggregatedStats, CoreStats, VfsStats, DaemonState, CompletedTransferItem, StorageInfo } from '../lib/types';
 
 interface UseStatsOptions {
   enabled?: boolean;
@@ -16,6 +16,7 @@ interface UseStatsReturn {
   recentTransfers: CompletedTransferItem[];
   isLoading: boolean;
   error: string | null;
+  storageInfo: StorageInfo | null;
 }
 
 export function useStats(options: UseStatsOptions): UseStatsReturn {
@@ -28,6 +29,7 @@ export function useStats(options: UseStatsOptions): UseStatsReturn {
   const [recentTransfers, setRecentTransfers] = useState<CompletedTransferItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [storageInfo, setStorageInfo] = useState<StorageInfo | null>(null);
 
   const mountedRef = useRef(true);
 
@@ -47,6 +49,7 @@ export function useStats(options: UseStatsOptions): UseStatsReturn {
         setVfsStats(data.vfsStats);
         setMountStatus(data.mountStatus);
         setRecentTransfers(data.recentTransfers?.transferred ?? []);
+        setStorageInfo(data.storageInfo ?? null);
         setError(null);
       } else {
         setError(String(statsResult.reason));
@@ -73,6 +76,7 @@ export function useStats(options: UseStatsOptions): UseStatsReturn {
       setCoreStats(null);
       setVfsStats(null);
       setMountStatus(null);
+      setStorageInfo(null);
       setIsLoading(false);
       return;
     }
@@ -87,5 +91,5 @@ export function useStats(options: UseStatsOptions): UseStatsReturn {
     };
   }, [enabled, interval, fetchAll, profileId]);
 
-  return { coreStats, vfsStats, mountStatus, daemonStatus, recentTransfers, isLoading, error };
+  return { coreStats, vfsStats, mountStatus, daemonStatus, recentTransfers, isLoading, error, storageInfo };
 }

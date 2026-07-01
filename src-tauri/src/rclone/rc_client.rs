@@ -117,4 +117,13 @@ impl RcClient {
     pub async fn core_transferred(&self) -> Result<Value, AppError> {
         self.post("core/transferred", None).await
     }
+
+    /// Get remote storage space info — `POST /operations/about`.
+    pub async fn operations_about(&self, fs: &str) -> Result<Value, AppError> {
+        self.post(
+            "operations/about",
+            Some(serde_json::json!({ "fs": fs })),
+        )
+        .await
+    }
 }

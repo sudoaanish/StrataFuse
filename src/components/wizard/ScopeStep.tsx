@@ -48,9 +48,12 @@ export function ScopeStep({
               label="Subdirectory Path"
               value={subDirectory}
               onChange={(v) => onUpdate('subDirectory', v)}
-              placeholder="path/to/folder"
+              placeholder="e.g., StrataFuse (Relative to root)"
               error={errors.subDirectory}
             />
+            <p className="mt-1.5 text-[10px] text-white/35">
+              Enter the folder name relative to your cloud storage root. Do not paste full browser URLs or local computer paths.
+            </p>
           </div>
         )}
       </div>

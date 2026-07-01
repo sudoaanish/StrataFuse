@@ -53,9 +53,11 @@ interface TuningStepProps {
   tuningProfile: 'media' | 'general' | 'backup';
   profileName: string;
   autoMount: boolean;
+  bwlimit: string;
   onSelectTuning: (profile: 'media' | 'general' | 'backup') => void;
   onProfileNameChange: (name: string) => void;
   onChangeAutoMount: (autoMount: boolean) => void;
+  onBwlimitChange: (limit: string) => void;
   onCreateProfile: () => void;
   isCreating: boolean;
   canCreate: boolean;
@@ -66,9 +68,11 @@ export function TuningStep({
   tuningProfile,
   profileName,
   autoMount,
+  bwlimit,
   onSelectTuning,
   onProfileNameChange,
   onChangeAutoMount,
+  onBwlimitChange,
   onCreateProfile,
   isCreating,
   canCreate,
@@ -122,6 +126,27 @@ export function TuningStep({
         onChange={onProfileNameChange}
         placeholder="My Cloud Mount"
       />
+
+      {/* ── Bandwidth Throttling ────────────────────────────────────── */}
+      <div className="space-y-1.5">
+        <label className="block text-sm font-medium text-white/60">Bandwidth Throttling (Speed Limit)</label>
+        <div className="relative">
+          <select
+            value={bwlimit || ''}
+            onChange={(e) => onBwlimitChange(e.target.value)}
+            className="w-full bg-white/[0.03] border border-white/[0.08] hover:border-white/[0.15] text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-violet-500/50 transition-all font-medium appearance-none cursor-pointer"
+          >
+            <option value="" className="bg-[#0b0c16] text-white">No Speed Limit (Maximum Performance)</option>
+            <option value="10M" className="bg-[#0b0c16] text-white">10 MB/s (High Speed)</option>
+            <option value="5M" className="bg-[#0b0c16] text-white">5 MB/s (Balanced)</option>
+            <option value="2M" className="bg-[#0b0c16] text-white">2 MB/s (Eco Throttling)</option>
+            <option value="1M" className="bg-[#0b0c16] text-white">1 MB/s (Minimal background usage)</option>
+          </select>
+          <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-white/30 text-[10px]">
+            ▼
+          </div>
+        </div>
+      </div>
 
       {/* ── Auto Mount Toggle ──────────────────────────────────────── */}
       <ToggleSwitch
