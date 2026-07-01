@@ -52,7 +52,7 @@ jobs:
         if: matrix.platform == 'windows-latest'
         shell: powershell
         run: |
-          curl -L https://downloads.rclone.org/v1.68.1/rclone-v1.68.1-windows-amd64.zip -o rclone-windows.zip
+          curl.exe -L https://downloads.rclone.org/v1.68.1/rclone-v1.68.1-windows-amd64.zip -o rclone-windows.zip
           Expand-Archive -Path rclone-windows.zip -DestinationPath tmp-win -Force
           Move-Item -Path tmp-win/*/rclone.exe -Destination src-tauri/binaries/rclone-x86_64-pc-windows-msvc.exe -Force
 
