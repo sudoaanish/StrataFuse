@@ -1,0 +1,11 @@
+{
+  "version": "0.2.0",
+  "notes": "Premium features release including in-app updater and signing integrations.",
+  "pub_date": "2026-07-01T03:00:00Z",
+  "platforms": {
+    "windows-x86_64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSeXlnL2JTSXJiTzJtSm9lSnp2azVJQXJjMmV2eXZyNlh1aU9CV0ltcTVIU2Uvd1NOWHlJcVlBMVNKMEhLZ3RpOUJteVJlOVJiRUxBUUNLQUhrY3ZHMjR6N3hsbVAzNndNPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgyODc0Nzk2CWZpbGU6U3RyYXRhRnVzZV8wLjEuMV94NjQtc2V0dXAuZXhlCkZHaGJHdS9qTmgzVVBWNWtta1VVV29ET2pPUmZUMGRLWlNFRHN0ZnA0UkdiSzcvaEV2a3VyNVNZY21iZUR1cXgwaUFEY2NpcmEvaGFPZUlneHpxaERnPT0K",
+      "url": "https://github.com/sudoaanish/StrataFuse/releases/download/v0.1.1/StrataFuse_0.1.1_x64-setup.exe"
+    }
+  }
+}
