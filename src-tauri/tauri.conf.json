@@ -33,6 +33,7 @@
     "publisher": "Aanish Farrukh",
     "license": "MIT",
     "licenseFile": "../LICENSE",
+    "createUpdaterArtifacts": true,
     "targets": "all",
     "externalBin": [
       "rclone"
