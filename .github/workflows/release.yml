@@ -67,7 +67,10 @@ jobs:
           mv tmp-arm64/rclone src-tauri/rclone-aarch64-apple-darwin
           rm -rf tmp-arm64
 
-          chmod +x src-tauri/rclone-x86_64-apple-darwin src-tauri/rclone-aarch64-apple-darwin
+          # Create universal binary for universal-apple-darwin target
+          lipo -create -output src-tauri/rclone-universal-apple-darwin src-tauri/rclone-x86_64-apple-darwin src-tauri/rclone-aarch64-apple-darwin
+
+          chmod +x src-tauri/rclone-x86_64-apple-darwin src-tauri/rclone-aarch64-apple-darwin src-tauri/rclone-universal-apple-darwin
 
       - name: Download Linux Sidecar
         if: matrix.platform == 'ubuntu-22.04'
