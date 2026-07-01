@@ -32,6 +32,7 @@ For general users, pre-compiled installers are available directly from the **[Re
    * The **NSIS Setup Executable** (`StrataFuse_x.x.x_x64-setup.exe`) for a standalone setup wizard.
 3. Run the downloaded installer file and follow the on-screen setup prompts.
 4. Launch **StrataFuse** from your desktop or start menu!
+5. **Next Step (Important):** If you are configuring a Google Drive mount, skip the *Developer Guide* and go directly to the [Google Cloud Platform (GCP) OAuth Setup Guide](#google-cloud-platform-gcp-oauth-setup-guide) below to set up your API credentials.
 
 ---
 
