@@ -60,6 +60,20 @@ Follow these step-by-step instructions to create your own GCP API credentials:
 
 ---
 
+## Installation
+
+For general users, pre-compiled installers are available directly from the **[Releases](https://github.com/sudoaanish/StrataFuse/releases)** page on GitHub.
+
+### How to Install (Windows):
+1. Go to the [Releases](https://github.com/sudoaanish/StrataFuse/releases) page.
+2. Under the latest version (e.g. `v0.1.0`), download either:
+   * The **MSI Installer** (`StrataFuse_x.x.x_x64_en-US.msi`) for standard Windows installations.
+   * The **NSIS Setup Executable** (`StrataFuse_x.x.x_x64-setup.exe`) for a standalone setup wizard.
+3. Run the downloaded installer file and follow the on-screen setup prompts.
+4. Launch **StrataFuse** from your desktop or start menu!
+
+---
+
 ## Developer Guide
 
 ### Prerequisites
