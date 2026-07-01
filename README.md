@@ -13,26 +13,65 @@ It provides automatic VFS cache tuning, dynamic system tray integrations, automa
   * **Media Streaming:** Full VFS file cache, 100GB maximum limit, and network mode settings tailored for Plex/Jellyfin/VLC streaming.
   * **General Purpose:** Write-cached files, 10GB limit for daily office work and file operations.
   * **Backup / Sync:** Minimal 1GB cache mode optimized for raw, high-throughput backups.
+* **VFS Cache Purging:** Securely clear local cached file chunks directly from disk with a single click inside the dashboard to instantly recover local storage.
+* **Bandwidth Throttling / Speed Limits:** Select and throttle your cloud drive sync speeds (No Limit, 10MB/s, 5MB/s, 2MB/s, 1MB/s) dynamically inside the setup wizard.
+* **Cloud Storage Utilization Gauge:** Live progress stats showing your remote cloud drive storage limits, used disk space, and free capacity.
 * **Dynamic System Tray Controls:** List your mount profiles directly from the taskbar system tray menu. You can mount or unmount profiles contextually with a single click without opening the GUI.
 * **"Open in Explorer" Integration:** Reveal active mount drive letters (e.g. `Z:\` or `S:\`) directly in Windows Explorer with a single click.
 * **Startup Autostart:** Automatically launches minimized to the system tray on Windows startup and mounts any profiles set to auto-mount.
 * **Zero-Knowledge Encryption:** Native integration with rclone's crypt layer to encrypt files locally before they are uploaded to public cloud providers.
-* **Live Performance Monitoring:** View active download/upload speeds, transferred sizes, VFS cache storage utilization, and real-time logs inside the dashboard.
+* **Live Performance Monitoring:** View active download speeds, transferred sizes, and real-time logs inside the dashboard.
 
 ---
 
-## Installation
+## Installation & Setup Guide
 
-For general users, pre-compiled installers are available directly from the **[Releases](https://github.com/sudoaanish/StrataFuse/releases)** page on GitHub.
+### Which Asset Should You Download?
 
-### How to Install (Windows):
-1. Go to the [Releases](https://github.com/sudoaanish/StrataFuse/releases) page.
-2. Under the latest version (e.g. `v0.1.0`), download either:
-   * The **MSI Installer** (`StrataFuse_x.x.x_x64_en-US.msi`) for standard Windows installations.
-   * The **NSIS Setup Executable** (`StrataFuse_x.x.x_x64-setup.exe`) for a standalone setup wizard.
-3. Run the downloaded installer file and follow the on-screen setup prompts.
-4. Launch **StrataFuse** from your desktop or start menu!
+When visiting the **[Releases](https://github.com/sudoaanish/StrataFuse/releases)** page on GitHub, download the package matching your operating system and user preference:
+
+| Operating System | Recommended Download | Best For |
+| :--- | :--- | :--- |
+| **Windows 10/11** | `StrataFuse_x.x.x_x64-setup.exe` | **Recommended.** Lightweight, standard setup wizard. Installable without administrator rights. |
+| **Windows 10/11** | `StrataFuse_x.x.x_x64_en-US.msi` | Standard MSI installer package. Best for enterprise deployments. |
+| **macOS (Intel/Apple Silicon)** | `StrataFuse_x.x.x_universal.dmg` | **Recommended.** Drag-and-drop installer volume that runs on both Intel and Apple Silicon Macs natively. |
+| **Linux (Ubuntu/Debian)** | `StrataFuse_0.2.0_amd64.deb` | Debian installer package. Best for Ubuntu, Debian, Mint, etc. |
+| **Linux (Fedora/CentOS)** | `StrataFuse-0.2.0-1.x86_64.rpm` | Red Hat Package Manager format. Best for Fedora, CentOS, RHEL, etc. |
+| **Linux (Any Distro)** | `StrataFuse_0.2.0_amd64.AppImage` | Standalone portable executable. Runs on any distribution without installation. |
+
+> [!NOTE]
+> The `.sig` files uploaded alongside installers are cryptographic signatures. They are used by the in-app auto-updater to verify installer integrity and block tamper or man-in-the-middle attacks. You do not need to download them manually.
+
+---
+
+### Step-by-Step Installation Guides
+
+#### 🖥️ Installing on Windows
+1. Download `StrataFuse_0.2.0_x64-setup.exe` from the [Releases](https://github.com/sudoaanish/StrataFuse/releases) page.
+2. Double-click the downloaded setup file to launch the installer wizard.
+3. Follow the prompts to finish the installation.
+4. Launch **StrataFuse** from your Desktop shortcut or the Start Menu!
 5. **Next Step (Important):** If you are configuring a Google Drive mount, skip the *Developer Guide* and go directly to the [Google Cloud Platform (GCP) OAuth Setup Guide](#google-cloud-platform-gcp-oauth-setup-guide) below to set up your API credentials.
+
+#### 🍏 Installing on macOS (Unsigned App Override)
+StrataFuse releases on macOS are unsigned Universal DMGs. To bypass macOS security gatekeeper warning screens:
+1. Download `StrataFuse_0.2.0_universal.dmg` from the [Releases](https://github.com/sudoaanish/StrataFuse/releases) page.
+2. Double-click the `.dmg` file to open it, then drag the **StrataFuse** icon into your **Applications** folder.
+3. Open your **Applications** folder, right-click (or control-click) **StrataFuse**, and select **Open**.
+4. A warning dialog will appear saying the developer cannot be verified. Click **Open** (or go to **System Settings > Privacy & Security** and click **Open Anyway** under the security section). You only need to do this once.
+
+#### 🐧 Installing on Linux
+*   **Via AppImage (Easiest):**
+    1. Download `StrataFuse_0.2.0_amd64.AppImage`.
+    2. Right-click the downloaded file, go to **Properties > Permissions**, and check **Allow executing file as program** (or run `chmod +x StrataFuse_0.2.0_amd64.AppImage` in your terminal).
+    3. Double-click to run!
+*   **Via DEB (Ubuntu/Debian):**
+    1. Download `StrataFuse_0.2.0_amd64.deb`.
+    2. Open your terminal and run:
+       ```bash
+       sudo apt install ./StrataFuse_0.2.0_amd64.deb
+       ```
+    3. Launch StrataFuse from your desktop application menu.
 
 ---
 
