@@ -45,41 +45,38 @@ jobs:
       - name: Install Node dependencies
         run: npm ci
 
-      - name: Create binaries directory
-        run: mkdir -p src-tauri/binaries
-
       - name: Download Windows Sidecar
         if: matrix.platform == 'windows-latest'
         shell: bash
         run: |
           curl.exe -L https://downloads.rclone.org/v1.68.1/rclone-v1.68.1-windows-amd64.zip -o rclone-windows.zip
-          unzip -j rclone-windows.zip "*/rclone.exe" -d src-tauri/binaries
-          mv src-tauri/binaries/rclone.exe src-tauri/binaries/rclone-x86_64-pc-windows-msvc.exe
+          unzip -j rclone-windows.zip "*/rclone.exe" -d src-tauri
+          mv src-tauri/rclone.exe src-tauri/rclone-x86_64-pc-windows-msvc.exe
 
       - name: Download macOS Sidecars
         if: matrix.platform == 'macos-latest'
         shell: bash
         run: |
           curl -L https://downloads.rclone.org/v1.68.1/rclone-v1.68.1-osx-amd64.zip -o rclone-osx-amd64.zip
-          unzip -j rclone-osx-amd64.zip "*/rclone" -d src-tauri/binaries
-          mv src-tauri/binaries/rclone src-tauri/binaries/rclone-x86_64-apple-darwin
+          unzip -j rclone-osx-amd64.zip "*/rclone" -d src-tauri
+          mv src-tauri/rclone src-tauri/rclone-x86_64-apple-darwin
 
           curl -L https://downloads.rclone.org/v1.68.1/rclone-v1.68.1-osx-arm64.zip -o rclone-osx-arm64.zip
           mkdir -p tmp-arm64
           unzip -j rclone-osx-arm64.zip "*/rclone" -d tmp-arm64
-          mv tmp-arm64/rclone src-tauri/binaries/rclone-aarch64-apple-darwin
+          mv tmp-arm64/rclone src-tauri/rclone-aarch64-apple-darwin
           rm -rf tmp-arm64
 
-          chmod +x src-tauri/binaries/rclone-x86_64-apple-darwin src-tauri/binaries/rclone-aarch64-apple-darwin
+          chmod +x src-tauri/rclone-x86_64-apple-darwin src-tauri/rclone-aarch64-apple-darwin
 
       - name: Download Linux Sidecar
         if: matrix.platform == 'ubuntu-22.04'
         shell: bash
         run: |
           curl -L https://downloads.rclone.org/v1.68.1/rclone-v1.68.1-linux-amd64.zip -o rclone-linux-amd64.zip
-          unzip -j rclone-linux-amd64.zip "*/rclone" -d src-tauri/binaries
-          mv src-tauri/binaries/rclone src-tauri/binaries/rclone-x86_64-unknown-linux-gnu
-          chmod +x src-tauri/binaries/rclone-x86_64-unknown-linux-gnu
+          unzip -j rclone-linux-amd64.zip "*/rclone" -d src-tauri
+          mv src-tauri/rclone src-tauri/rclone-x86_64-unknown-linux-gnu
+          chmod +x src-tauri/rclone-x86_64-unknown-linux-gnu
 
       - name: Build and Publish Release
         uses: tauri-apps/tauri-action@v0
