@@ -10,10 +10,19 @@ interface Props {
 export function LogViewer({ logs }: Props) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll to bottom
+  const lastLength = useRef(0);
+
+  // Auto-scroll to bottom only if user is already near the bottom or on initial load
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    const el = scrollRef.current;
+    if (el) {
+      const length = logs?.entries.length ?? 0;
+      const isFirstLoad = lastLength.current === 0 && length > 0;
+      const isNearBottom = el.scrollHeight - el.clientHeight - el.scrollTop < 50;
+      if (isFirstLoad || isNearBottom) {
+        el.scrollTop = el.scrollHeight;
+      }
+      lastLength.current = length;
     }
   }, [logs?.entries.length]);
 

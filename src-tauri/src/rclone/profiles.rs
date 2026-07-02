@@ -283,6 +283,13 @@ impl ProfileManager {
         })?;
 
         let clean_remote = profile.remote.trim_end_matches(':');
+
+        if clean_remote.contains('/') || clean_remote.contains('\\') || clean_remote.contains("..") {
+            return Err(std::io::Error::new(
+                std::io::ErrorKind::InvalidInput,
+                "Invalid remote name: path traversal characters detected",
+            ));
+        }
         
         let get_home_dir = || {
             std::env::var("USERPROFILE")

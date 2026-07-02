@@ -39,7 +39,7 @@ function reducer(state: WizardData, action: Action): WizardData {
 
 const PROVIDER_NAMES: Record<string, string> = {
   gdrive: 'Google Drive', onedrive: 'OneDrive', s3: 'Amazon S3',
-  dropbox: 'Dropbox', proton: 'Proton Drive', other: 'Custom Remote',
+  dropbox: 'Dropbox', protondrive: 'Proton Drive', other: 'Custom Remote',
 };
 
 interface Props {
@@ -117,7 +117,10 @@ export function SetupWizard({ onComplete, onCancel, editingProfile = null }: Pro
         }
         return false;
       }
-      case 2: return !!data.mountPoint && (!data.useCrypt || (!!data.cryptPassword && data.cryptPassword === data.cryptPassword2));
+      case 2: {
+        const errors = getScopeErrors();
+        return Object.keys(errors).length === 0;
+      }
       case 3: return !!data.profileName;
       default: return false;
     }
@@ -169,7 +172,8 @@ export function SetupWizard({ onComplete, onCancel, editingProfile = null }: Pro
         if (data.authConfig.secretAccessKey) credentials.secretAccessKey = data.authConfig.secretAccessKey;
         if (data.authConfig.region) credentials.region = data.authConfig.region;
       } else if (data.provider === 'protondrive') {
-        remote = 'protondrive:';
+        const subPath = data.mountEntireDrive ? '' : (data.subDirectory || '');
+        remote = `protondrive:${subPath}`;
         if (data.authConfig.username) credentials.username = data.authConfig.username;
         if (data.authConfig.password) {
           if (editingProfile && data.authConfig.password === editingProfile.credentials?.password) {
@@ -181,10 +185,13 @@ export function SetupWizard({ onComplete, onCancel, editingProfile = null }: Pro
           }
         }
       } else if (data.provider === 'other') {
-        remote = data.authConfig.remoteName ? `${data.authConfig.remoteName}:` : 'other:';
+        const base = data.authConfig.remoteName ? `${data.authConfig.remoteName}:` : 'other:';
+        const subPath = data.mountEntireDrive ? '' : (data.subDirectory || '');
+        remote = `${base}${subPath}`;
       } else {
         // OAuth-based (gdrive, onedrive, dropbox)
-        remote = `${data.provider}:`;
+        const subPath = data.mountEntireDrive ? '' : (data.subDirectory || '');
+        remote = `${data.provider}:${subPath}`;
         if (data.authConfig.token) credentials.token = data.authConfig.token;
         if (data.authConfig.clientId) credentials.clientId = data.authConfig.clientId;
         if (data.authConfig.clientSecret) credentials.clientSecret = data.authConfig.clientSecret;
@@ -268,7 +275,10 @@ export function SetupWizard({ onComplete, onCancel, editingProfile = null }: Pro
           {step === 0 && (
             <ProviderStep
               selected={data.provider}
-              onSelect={(val) => update({ provider: val })}
+              onSelect={(val) => update({
+                provider: val,
+                authConfig: val === 's3' ? { region: 'us-east-1' } : {},
+              })}
             />
           )}
           {step === 1 && (
@@ -306,10 +316,6 @@ export function SetupWizard({ onComplete, onCancel, editingProfile = null }: Pro
               onProfileNameChange={(val) => update({ profileName: val })}
               onChangeAutoMount={(val) => update({ autoMount: val })}
               onBwlimitChange={(val) => update({ bwlimit: val })}
-              onCreateProfile={handleCreate}
-              isCreating={isSubmitting}
-              canCreate={canProceed()}
-              isEditing={!!editingProfile}
             />
           )}
         </div>
@@ -346,9 +352,9 @@ export function SetupWizard({ onComplete, onCancel, editingProfile = null }: Pro
               className="flex items-center gap-2 px-8 py-2.5 rounded-lg text-sm font-semibold bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed shadow-lg shadow-violet-500/25"
             >
               {isSubmitting ? (
-                <><Loader2 className="w-4 h-4 animate-spin-slow" /> Creating...</>
+                <><Loader2 className="w-4 h-4 animate-spin-slow" /> {editingProfile ? 'Saving...' : 'Creating...'}</>
               ) : (
-                'Create Mount Profile'
+                editingProfile ? 'Save Profile' : 'Create Mount Profile'
               )}
             </button>
           )}

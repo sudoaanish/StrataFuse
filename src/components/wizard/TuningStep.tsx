@@ -1,4 +1,4 @@
-import { Zap, Activity, Upload, Check, Loader2 } from 'lucide-react';
+import { Zap, Activity, Upload, Check } from 'lucide-react';
 import { GlassCard } from '../ui/GlassCard';
 import { TextInput } from '../ui/TextInput';
 import { ToggleSwitch } from '../ui/ToggleSwitch';
@@ -58,10 +58,6 @@ interface TuningStepProps {
   onProfileNameChange: (name: string) => void;
   onChangeAutoMount: (autoMount: boolean) => void;
   onBwlimitChange: (limit: string) => void;
-  onCreateProfile: () => void;
-  isCreating: boolean;
-  canCreate: boolean;
-  isEditing?: boolean;
 }
 
 export function TuningStep({
@@ -73,10 +69,6 @@ export function TuningStep({
   onProfileNameChange,
   onChangeAutoMount,
   onBwlimitChange,
-  onCreateProfile,
-  isCreating,
-  canCreate,
-  isEditing = false,
 }: TuningStepProps) {
   return (
     <div className="step-enter space-y-6">
@@ -155,30 +147,6 @@ export function TuningStep({
         checked={autoMount}
         onChange={onChangeAutoMount}
       />
-
-      {/* ── Create Button ──────────────────────────────────────────── */}
-      <button
-        onClick={onCreateProfile}
-        disabled={!canCreate || isCreating}
-        className={`
-          w-full py-3.5 rounded-xl font-semibold text-sm
-          flex items-center justify-center gap-2.5
-          transition-all duration-300
-          ${canCreate && !isCreating
-            ? 'bg-gradient-to-r from-violet-600 to-purple-600 text-white hover:shadow-[0_0_30px_rgba(139,92,246,0.3)] hover:scale-[1.01]'
-            : 'bg-white/[0.04] text-white/30 cursor-not-allowed'
-          }
-        `}
-      >
-        {isCreating ? (
-          <>
-            <Loader2 className="w-4 h-4 animate-spin" />
-            {isEditing ? 'Saving Profile…' : 'Creating Profile…'}
-          </>
-        ) : (
-          isEditing ? 'Save Profile' : 'Create Mount Profile'
-        )}
-      </button>
     </div>
   );
 }

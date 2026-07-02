@@ -608,10 +608,11 @@ mod tests {
                 timestamp: Utc::now(),
                 stream: LogStream::Stdout,
                 line: format!("line {}", i),
+                profile_id: None,
             });
         }
         assert_eq!(ring.len(), 3);
-        let recent = ring.recent(10);
+        let recent = ring.recent(10, None);
         assert_eq!(recent.len(), 3);
         assert_eq!(recent[0].line, "line 2");
         assert_eq!(recent[2].line, "line 4");
@@ -625,9 +626,10 @@ mod tests {
                 timestamp: Utc::now(),
                 stream: LogStream::Stdout,
                 line: format!("line {}", i),
+                profile_id: None,
             });
         }
-        let recent = ring.recent(5);
+        let recent = ring.recent(5, None);
         assert_eq!(recent.len(), 5);
         assert_eq!(recent[0].line, "line 45");
         assert_eq!(recent[4].line, "line 49");

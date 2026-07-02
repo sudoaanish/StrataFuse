@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { invoke } from '@tauri-apps/api/core';
 import { useStats } from '../../hooks/useStats';
 import { useLogs } from '../../hooks/useLogs';
@@ -8,7 +8,7 @@ import { TransferTable } from './TransferTable';
 import { CachePanel } from './CachePanel';
 import { LogViewer } from './LogViewer';
 import { formatBytes, formatSpeed, formatDuration } from '../../lib/format';
-import { Square, RefreshCw, Download, Activity, AlertTriangle, ArrowLeft, Folder, Cloud } from 'lucide-react';
+import { Square, RefreshCw, Download, Activity, AlertTriangle, ArrowLeft, Folder, Cloud, Loader2 } from 'lucide-react';
 
 interface Props {
   profileName: string;
@@ -19,17 +19,23 @@ interface Props {
 }
 
 export function Dashboard({ profileName, profileId, mountPoint, onDisconnect, onBackToList }: Props) {
-  const { coreStats, vfsStats, daemonStatus, recentTransfers, storageInfo } = useStats({ enabled: true, interval: 2000, profileId });
+  const { coreStats, vfsStats, daemonStatus, recentTransfers, storageInfo, isLoading, error } = useStats({ enabled: true, interval: 2000, profileId });
   const { entries, totalLines } = useLogs({ enabled: true, interval: 3000, count: 200, profileId });
   const { addToast } = useToast();
   const [uptime, setUptime] = useState(0);
-  const startTime = useRef(Date.now());
   
-  // Uptime counter
+  // Uptime counter relative to startedAt
   useEffect(() => {
-    const id = setInterval(() => setUptime(Math.floor((Date.now() - startTime.current) / 1000)), 1000);
+    const id = setInterval(() => {
+      if (daemonStatus?.startedAt) {
+        const start = new Date(daemonStatus.startedAt).getTime();
+        setUptime(Math.floor((Date.now() - start) / 1000));
+      } else {
+        setUptime(0);
+      }
+    }, 1000);
     return () => clearInterval(id);
-  }, []);
+  }, [daemonStatus?.startedAt]);
 
   const handleStop = async () => {
     try {
@@ -43,9 +49,7 @@ export function Dashboard({ profileName, profileId, mountPoint, onDisconnect, on
 
   const handleRestart = async () => {
     try {
-      await invoke('stop_mount', { profileId });
-      await new Promise(r => setTimeout(r, 500));
-      await invoke('start_mount', { profileId });
+      await invoke('restart_mount', { profileId });
       addToast('success', 'Mount restarted successfully');
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
@@ -59,8 +63,25 @@ export function Dashboard({ profileName, profileId, mountPoint, onDisconnect, on
   // Build a LogQueryResponse-compatible object for LogViewer
   const logData = { entries, totalLines, bufferedCount: entries.length };
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#0b0c16]">
+        <div className="flex flex-col items-center gap-3">
+          <Loader2 className="w-8 h-8 text-violet-500 animate-spin" />
+          <p className="text-white/60 text-sm">Loading dashboard statistics...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen p-6 relative z-10 animate-fade-in">
+      {error && (
+        <div className="mb-4 p-3 rounded-lg border border-red-500/20 bg-red-500/10 text-red-400 text-xs flex items-center gap-2 animate-fade-in z-40 relative">
+          <AlertTriangle className="w-4 h-4 flex-shrink-0" />
+          <span><b>Connection Warning:</b> {error} (Stats may be stale/offline)</span>
+        </div>
+      )}
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-4">

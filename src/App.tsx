@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { invoke } from '@tauri-apps/api/core';
+import { getVersion } from '@tauri-apps/api/app';
 import { openUrl } from '@tauri-apps/plugin-opener';
 import { check } from '@tauri-apps/plugin-updater';
 import { relaunch } from '@tauri-apps/plugin-process';
@@ -18,7 +19,12 @@ function AppContent() {
   const [profiles, setProfiles] = useState<MountProfile[]>([]);
   const [activeProfile, setActiveProfile] = useState<MountProfile | null>(null);
   const [editingProfile, setEditingProfile] = useState<MountProfile | null>(null);
+  const [appVersion, setAppVersion] = useState('0.2.0');
   const { addToast } = useToast();
+
+  useEffect(() => {
+    getVersion().then(setAppVersion).catch(() => {});
+  }, []);
 
   // Updater States
   const [updateInfo, setUpdateInfo] = useState<any>(null);
@@ -204,7 +210,7 @@ function AppContent() {
       {view !== 'dashboard' && view !== 'loading' && (
         <div className="absolute bottom-4 left-6 right-6 flex items-center justify-between text-[10px] text-white/20 select-none z-30 font-mono">
           <div className="flex items-center gap-3 animate-fade-in">
-            <span>StrataFuse v0.2.0</span>
+            <span>StrataFuse v{appVersion}</span>
             {updateStatus === 'checking' && (
               <span className="flex items-center gap-1 text-violet-400">
                 <Loader2 className="h-2.5 w-2.5 animate-spin" /> Checking...

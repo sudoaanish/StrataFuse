@@ -44,6 +44,9 @@ pub async fn get_recent_logs(
     let entries = log_manager.recent(count, profile_id.clone());
     
     let total_lines = if let Some(ref id) = profile_id {
+        if !id.chars().all(|c| c.is_ascii_alphanumeric() || c == '-') {
+            return Err(AppError::Io("Invalid profile ID: must be alphanumeric and hyphens only".into()));
+        }
         let log_path = log_manager.log_dir.join(format!("profile_{}.log", id));
         if log_path.exists() {
             if let Ok(file) = std::fs::File::open(&log_path) {

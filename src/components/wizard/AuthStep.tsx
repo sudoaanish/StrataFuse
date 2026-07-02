@@ -117,7 +117,7 @@ export function AuthStep({ provider, authConfig, onChange }: AuthStepProps) {
                         <p>5. Go to <b>Credentials</b> &rarr; <b>Create Credentials</b> &rarr; <b>OAuth client ID</b>.</p>
                         <p>6. Select Application Type: <b>Desktop App</b>, click Create, and paste the generated Client ID and Client Secret here.</p>
                       </>
-                    ) : (
+                    ) : provider === 'onedrive' ? (
                       <>
                         <p>1. Go to the <a href="https://portal.azure.com/" target="_blank" rel="noopener noreferrer" className="text-violet-400 hover:underline">Microsoft Azure Portal</a>.</p>
                         <p>2. Select <b>App registrations</b> &rarr; <b>New registration</b>.</p>
@@ -126,7 +126,14 @@ export function AuthStep({ provider, authConfig, onChange }: AuthStepProps) {
                         <p>5. Copy the <b>Application (client) ID</b> from the Overview page.</p>
                         <p>6. Go to <b>Certificates & secrets</b> &rarr; <b>New client secret</b> and copy the Value.</p>
                       </>
-                    )}
+                    ) : provider === 'dropbox' ? (
+                      <>
+                        <p>1. Go to the <a href="https://www.dropbox.com/developers/apps" target="_blank" rel="noopener noreferrer" className="text-violet-400 hover:underline">Dropbox App Console</a>.</p>
+                        <p>2. Click <b>Create app</b>, select <b>Scoped access</b>, and choose <b>Full Dropbox</b> access.</p>
+                        <p>3. Under the <b>Permissions</b> tab, check: <code>files.metadata.read/write</code> and <code>files.content.read/write</code>.</p>
+                        <p>4. In the <b>Settings</b> tab, copy your <b>App key</b> (Client ID) and <b>App secret</b> (Client Secret).</p>
+                      </>
+                    ) : null}
                   </div>
                 )}
               </div>
