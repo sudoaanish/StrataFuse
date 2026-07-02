@@ -1,23 +1,23 @@
 {
-  "version": "0.2.0",
-  "notes": "Phase B Release: Subfolder mount defaults, Bandwidth Throttling/Speed Limits, VFS cache purging, Cloud storage space utilization gauge, and multi-platform support.",
-  "pub_date": "2026-07-01T07:25:00Z",
+  "version": "0.2.1",
+  "notes": "Version 0.2.1 Release: Core Audit Fixes - Wizard layout corrections, S3 pre-population, OAuth directory mounting path enhancements, security path traversal protections, and test suite compilation patches.",
+  "pub_date": "2026-07-02T00:33:00Z",
   "platforms": {
     "windows-x86_64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSeXlnL2JTSXJiTzhHNnZpM3N1VHZITkhGdjhDUTBPOWJvd1BWMG92cy95dm1TTVZ4emtnVFV5U1ZQVkcrc1R4R3UxYXFRWjhKYlU3aUpYcjlHVHNtM1h0R1RBeEZmOUFrPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgyODkwMzAzCWZpbGU6U3RyYXRhRnVzZV8wLjIuMF94NjQtc2V0dXAuZXhlClJ2Mys3QWdOOVFHSHFEdWdUaEE1OUdoa2QwVjNBZ0Z3Ylo0S0QvVWdkalBURldDMFJtQlJZT0tETlZoZE9VdWwra2w5Q2VwSXdJM0V1Y1N3RGlMb0FBPT0K",
-      "url": "https://github.com/sudoaanish/StrataFuse/releases/download/v0.2.0/StrataFuse_0.2.0_x64-setup.exe"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSeXlnL2JTSXJiTzl3eFhjWG5kMStGREpQQ1BudkF3ZGJYMlBFZElGSW9rWWpOVHJSTVVlN2xQeklaRWVKWlpXUkRkcEdWNXVNb05zNHNWWXZoeVVQeGhnNmUyaGZ3RHdBPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgyOTUyMjkyCWZpbGU6U3RyYXRhRnVzZV8wLjIuMV94NjQtc2V0dXAuZXhlCnQ5aTNDS3JaTzl1QkZONjJxeFF6bGVvcDRwYlpIR3I3VHhXelV2djNjZk0yU200MTNPUkJKL3hIRFpCQ01ncnF5eGMwVEtGVXQyU0wvb0tTa0JTT0JRPT0K",
+      "url": "https://github.com/sudoaanish/StrataFuse/releases/download/v0.2.1/StrataFuse_0.2.1_x64-setup.exe"
     },
     "darwin-x86_64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSeXlnL2JTSXJiT3orNHpqVnJxb2Rja0NmcFBvQi9xS1dLeG41dXJxMmd2dER4aGp3RzkvK1ZpRENBZlFkZFdQbzZ4SzdlTjNWdHRHYU05aGYyakNXeDRpMXh6MWlvZUF3PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgyODkwMTg0CWZpbGU6U3RyYXRhRnVzZS5hcHAudGFyLmd6CkliM1gxRlRCc2hUMTJzYnhYeFNYcnpVUW1HRldsVU5lSC9JMklWQ2c5WDRtRmcxa2E5QTc2bHR3ZUZHbGxOZ2hMblNTbkFMNEdvOW9RK25jc2tmWUFBPT0K",
-      "url": "https://github.com/sudoaanish/StrataFuse/releases/download/v0.2.0/StrataFuse_universal.app.tar.gz"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSeXlnL2JTSXJiTzRpNk1LTWJzZnYyNVRFRFBqVFQzV2pRWUt6bTlLRFBOMzlmOWFWYjFoY3lHSWdlL2pUd1MvUzI3a0pBeFppU2RxWmUwNzBqTUVkSEZEdGVqQVNWUndrPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgyOTUyMTk1CWZpbGU6U3RyYXRhRnVzZS5hcHAudGFyLmd6CjlYNHJpNFkwdVViV1cxN1lMTXZoYUMvTU90RkhCSS9reGRESGhRTXF4R21aUytzZjU2UElHZU5KQ1BNbWtvcG9TcDljQjdOdTAyVmpJMng3ckcyREFnPT0K",
+      "url": "https://github.com/sudoaanish/StrataFuse/releases/download/v0.2.1/StrataFuse_universal.app.tar.gz"
     },
     "darwin-aarch64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSeXlnL2JTSXJiT3orNHpqVnJxb2Rja0NmcFBvQi9xS1dLeG41dXJxMmd2dER4aGp3RzkvK1ZpRENBZlFkZFdQbzZ4SzdlTjNWdHRHYU05aGYyakNXeDRpMXh6MWlvZUF3PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgyODkwMTg0CWZpbGU6U3RyYXRhRnVzZS5hcHAudGFyLmd6CkliM1gxRlRCc2hUMTJzYnhYeFNYcnpVUW1HRldsVU5lSC9JMklWQ2c5WDRtRmcxa2E5QTc2bHR3ZUZHbGxOZ2hMblNTbkFMNEdvOW9RK25jc2tmWUFBPT0K",
-      "url": "https://github.com/sudoaanish/StrataFuse/releases/download/v0.2.0/StrataFuse_universal.app.tar.gz"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSeXlnL2JTSXJiTzRpNk1LTWJzZnYyNVRFRFBqVFQzV2pRWUt6bTlLRFBOMzlmOWFWYjFoY3lHSWdlL2pUd1MvUzI3a0pBeFppU2RxWmUwNzBqTUVkSEZEdGVqQVNWUndrPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgyOTUyMTk1CWZpbGU6U3RyYXRhRnVzZS5hcHAudGFyLmd6CjlYNHJpNFkwdVViV1cxN1lMTXZoYUMvTU90RkhCSS9reGRESGhRTXF4R21aUytzZjU2UElHZU5KQ1BNbWtvcG9TcDljQjdOdTAyVmpJMng3ckcyREFnPT0K",
+      "url": "https://github.com/sudoaanish/StrataFuse/releases/download/v0.2.1/StrataFuse_universal.app.tar.gz"
     },
     "linux-x86_64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSeXlnL2JTSXJiTzNZNG5qMnZSSlY1WTBUSlNvelFrVkw3VXZENnVOcWFhS3cvNUN0RE13L0IwVm50cXIzMnlIM3JOWk9xa0tWd2FSUFJ2SGxQZFcvSUVqZS9HQVV0dFFzPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgyODkwMjU4CWZpbGU6U3RyYXRhRnVzZV8wLjIuMF9hbWQ2NC5BcHBJbWFnZQpEZHRoVDJUTjdnSnF4VGQ2UWZ6akNvam9md3F1aTNnVC9GQ1l3dDRuN0lTQkovd0dUQnlxM1VucE5TU1JaOVpsSm1DcWxwbE5OeGMxS3pES0lMNFNBdz09Cg==",
-      "url": "https://github.com/sudoaanish/StrataFuse/releases/download/v0.2.0/StrataFuse_0.2.0_amd64.AppImage"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSeXlnL2JTSXJiTzI2dGtuYkJlNlRuQWpUNTV2QVNuNk1LVDFPOXdQNXh0dXNrQ2RKSHg5TWZBWWNFWDY3aWRjVm9QQjVuNHJ0QkZFMThLaDNnQmNRdTZRbFB0bmZ0SlFrPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgyOTUyMjYyCWZpbGU6U3RyYXRhRnVzZV8wLjIuMV9hbWQ2NC5BcHBJbWFnZQplc2R1TGFBUEtWNEM3TG9jZlBtMkNzaytUUUxDZExxN09lQzN6cmpRVzJrOCtWNC9RN2V3WEFzL2dFaWthVm1CcXZUdDVUakphaDNVS05haHRBUnFCdz09Cg==",
+      "url": "https://github.com/sudoaanish/StrataFuse/releases/download/v0.2.1/StrataFuse_0.2.1_amd64.AppImage"
     }
   }
 }
