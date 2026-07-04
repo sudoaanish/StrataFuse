@@ -314,7 +314,7 @@ Created and developed by **Aanish Farrukh**.
   <a href="https://github.com/sudoaanish">
     <img src="https://img.shields.io/badge/GitHub-sudoaanish-181717?style=for-the-badge&logo=github" alt="GitHub" />
   </a>
-  <a href="https://aanishfarrukh.com">
+  <a href="http://aanishfarrukh.com/">
     <img src="https://img.shields.io/badge/Website-aanishfarrukh.com-111111?style=for-the-badge&logo=google-chrome&logoColor=white" alt="Website" />
   </a>
 </p>
